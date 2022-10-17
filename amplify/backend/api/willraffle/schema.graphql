@@ -1,0 +1,8 @@
+type RaffleEntry @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  email: String
+  raffle_id: String
+  patreon: Boolean
+}
+ 
