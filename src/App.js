@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import Logo from './assets/the-rat-club.png';
+import { useState } from 'react';
+import Logo from './the-rat-club.png';
 import './App.css';
 
 import { DataStore } from '@aws-amplify/datastore';
