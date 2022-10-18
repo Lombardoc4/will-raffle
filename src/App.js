@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import Logo from './the-rat-club.png';
+import Logo from './summer-festival-tour-lams.png';
+// import Logo from './the-rat-club.png';
 import './App.css';
 
 import { DataStore } from '@aws-amplify/datastore';
@@ -41,7 +42,6 @@ function App() {
         // Check to see if email is already been used
         const emailExist = await checkExisting(email)
 
-        console.log('exists', emailExist)
 
         if (emailExist.length === 0) {
 
@@ -73,7 +73,7 @@ function App() {
             <>
               <p>
                   Enter the Raffle to Win:<br/>
-                  Set Lists and Lams
+                  Summer Festival Tour Lams
               </p>
               <input type="text" id="name" placeholder="Name" onChange={e => setName(e.target.value)}/>
               <input type="email" id="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
