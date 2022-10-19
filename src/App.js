@@ -25,25 +25,24 @@ const checkExisting = async (email) => {
   return models;
 }
 
+// !! TODO Try previous commit
+
+
 function App() {
     const [submitted, setSubmitted] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
 
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         // validate inputs
         if (!validateInput(name, {minLength: 0, type:"string"})) return;
         if (!validateInput(email, {minLength: 0, type:"string", contains: '@'})) return;
 
         // Check to see if email is already been used
         const emailExist = await checkExisting(email)
-
-
-        if (emailExist.length === 0) {
+        if (!emailExist || emailExist.length === 0) {
 
           await DataStore.save(
               new RaffleEntry({
@@ -55,7 +54,6 @@ function App() {
           );
 
         }
-
         setSubmitted(true);
     };
 
@@ -66,7 +64,7 @@ function App() {
           { submitted && (
             <>
               <h1>Thanks for you submission</h1>
-              <p>The drawing is on October 19th</p>
+              <p>The drawing is on October 21st</p>
             </>
           )}
           {!submitted && (
