@@ -19,7 +19,7 @@ export default function Drawing() {
     async function fetchEntries() {
         console.log('fetch')
         try {
-          const entryData = await API.graphql(graphqlOperation(listRaffleEntries, {limit: "1000", nextToken: nextToken}))
+          const entryData = await API.graphql(graphqlOperation(listRaffleEntries, {limit: 1000, nextToken: nextToken}))
           console.log('entryData', entryData.data.listRaffleEntries);
 
           const dbEntries = entryData.data.listRaffleEntries.items
