@@ -52,9 +52,10 @@ function App() {
         const emailExist = await API.graphql(
           graphqlOperation(listRaffleEntries, {filter: {email: {eq: "chad.widmer@gmail.com"}}})
         );
-        if (!emailExist.data.listRaffleEntries.items || emailExist.data.listRaffleEntries.items === 0) {
+        // if (!emailExist.data.listRaffleEntries.items || emailExist.data.listRaffleEntries.items === 0) {
+          // console.log('add')
           await addTodo()
-        }
+        // }
 
         setSubmitted(true);
     };

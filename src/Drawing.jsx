@@ -13,11 +13,11 @@ export default function Drawing() {
 
     useEffect(() => {
         fetchEntries()
-    })
+    }, [])
 
     async function fetchEntries() {
         try {
-          const entryData = await API.graphql(graphqlOperation(listRaffleEntries))
+          const entryData = await API.graphql(graphqlOperation(listRaffleEntries, {limit: "1000"}))
           const dbEntries = entryData.data.listRaffleEntries.items
           setEntries(dbEntries)
         } catch (err) { console.log('error fetching todos') }
