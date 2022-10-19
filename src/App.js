@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Logo from './summer-festival-tour-lams.png';
 // import Logo from './the-rat-club.png';
 import './App.css';
 
-import { DataStore } from '@aws-amplify/datastore';
+import {  API, graphqlOperation } from 'aws-amplify'
+import { DataStore } from '@aws-amplify/datastore'
 import { RaffleEntry } from './models';
+import { createRaffleEntry } from './graphql/mutations';
 
 
 const validateInput = (name, options) => {
@@ -21,7 +23,7 @@ const validateInput = (name, options) => {
 }
 
 const checkExisting = async (email) => {
-  const models = await DataStore.query(RaffleEntry, c => c.email('eq', email));
+  const models = await DataStore.query(RaffleEntry, c => c.email('eq', email)).catch(e => {console.log(e); return [];});
   return models;
 }
 
@@ -34,8 +36,13 @@ function App() {
     const [email, setEmail] = useState('');
 
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+
+
+
         // validate inputs
         if (!validateInput(name, {minLength: 0, type:"string"})) return;
         if (!validateInput(email, {minLength: 0, type:"string", contains: '@'})) return;
@@ -44,18 +51,28 @@ function App() {
         const emailExist = await checkExisting(email)
         if (!emailExist || emailExist.length === 0) {
 
-          await DataStore.save(
-              new RaffleEntry({
-              "name": name,
-              "email": email,
-              "raffle_id": "October",
-              "patreon": window.location.pathname.includes('patreon')
-            })
-          );
+
+          await addTodo()
 
         }
+
         setSubmitted(true);
     };
+
+    async function addTodo() {
+      try {
+        const entry = {
+          "name": name,
+          "email": email,
+          "raffle_id": "October",
+          "patreon": window.location.pathname.includes('patreon')
+        }
+
+        await API.graphql(graphqlOperation(createRaffleEntry, {input: entry}))
+      } catch (err) {
+        console.log('error creating todo:', err)
+      }
+    }
 
 
     return (

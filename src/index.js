@@ -12,7 +12,7 @@ Amplify.configure(awsExports);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {window.location.pathname.includes('drawing') ? <Drawing/> : <App />}
     {/* <Drawing/> */}
   </React.StrictMode>
 );
