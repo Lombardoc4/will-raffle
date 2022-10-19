@@ -7,7 +7,7 @@ import {  API, graphqlOperation } from 'aws-amplify'
 import { DataStore } from '@aws-amplify/datastore'
 import { RaffleEntry } from './models';
 import { createRaffleEntry } from './graphql/mutations';
-
+import { listRaffleEntries } from './graphql/queries';
 
 const validateInput = (name, options) => {
   if (name.length <= options.minLength)
@@ -23,6 +23,7 @@ const validateInput = (name, options) => {
 }
 
 const checkExisting = async (email) => {
+
   const models = await DataStore.query(RaffleEntry, c => c.email('eq', email)).catch(e => {console.log(e); return [];});
   return models;
 }
@@ -48,12 +49,11 @@ function App() {
         if (!validateInput(email, {minLength: 0, type:"string", contains: '@'})) return;
 
         // Check to see if email is already been used
-        const emailExist = await checkExisting(email)
-        if (!emailExist || emailExist.length === 0) {
-
-
+        const emailExist = await API.graphql(
+          graphqlOperation(listRaffleEntries, {filter: {email: {eq: "chad.widmer@gmail.com"}}})
+        );
+        if (!emailExist.data.listRaffleEntries.items || emailExist.data.listRaffleEntries.items === 0) {
           await addTodo()
-
         }
 
         setSubmitted(true);
