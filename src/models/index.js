@@ -4,8 +4,9 @@ import { schema } from './schema';
 
 
 
-const { RaffleEntry } = initSchema(schema);
+const { Winner, RaffleEntry } = initSchema(schema);
 
 export {
+  Winner,
   RaffleEntry
 };
