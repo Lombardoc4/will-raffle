@@ -63,8 +63,8 @@ export default function Drawing() {
           <img src={Logo} alt="The Rat Club" />
 
             <h2>Polls are closed</h2>
-            <h2>{winner.name}</h2>
-            <p style={{fontSize: '0.66rem'}}>{winner.id}</p>
+            {/* <h2>{winner.name}</h2> */}
+            {/* <p style={{fontSize: '0.66rem'}}>{winner.id}</p> */}
 
             {/* {window.location.pathname.includes('button') && <button onClick={() => generateRandomWinner()}>Generate Winner</button>} */}
 
