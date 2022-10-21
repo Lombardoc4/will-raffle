@@ -12,6 +12,7 @@ export default function Drawing() {
     const [entries, setEntries] = useState([]);
     const [winners, setWinners] = useState([]);
     const [winner, setWinner] = useState(' ');
+    const [patreons, setPatreons] = useState([]);
     const [nextToken, setNextToken] = useState(null);
 
     useEffect(() => {
@@ -23,20 +24,34 @@ export default function Drawing() {
     }, [])
 
     async function fetchEntries() {
-        // console.log('fetch')
         try {
           const entryData = await API.graphql(graphqlOperation(listRaffleEntries, {limit: 1000, nextToken: nextToken}))
 
+            // Get DB Entries
             const dbEntries = entryData.data.listRaffleEntries.items
+            // Seperate Patreons
+            const dbPatreons = dbEntries.filter(e => e.patreon)
+
+            // Remove duplicates
             const filteredDoubles = [...entries, ...dbEntries].filter((value, index, self) =>
-                index === self.findIndex((t) => (t.email === value.email))
+            index === self.findIndex((t) => (t.email === value.email))
             )
 
-          setEntries(filteredDoubles)
 
-          if (entryData.data.listRaffleEntries.nextToken) {
-            setNextToken(entryData.data.listRaffleEntries.nextToken);
-          }
+            // If next token add values, patreons, and token
+            if (entryData.data.listRaffleEntries.nextToken) {
+                setEntries(filteredDoubles)
+                setPatreons([...patreons, ...dbPatreons]);
+                setNextToken(entryData.data.listRaffleEntries.nextToken);
+            } else {
+                // if final search filter duplicate patreons
+                const filteredPatreons = patreons.filter((value, index, self) =>
+                    index === self.findIndex((t) => (t.email === value.email))
+                )
+
+                setEntries([...filteredDoubles, ...filteredPatreons])
+            }
+
         } catch (err) { console.log('error fetching todos') }
     }
 
