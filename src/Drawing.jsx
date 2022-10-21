@@ -20,10 +20,14 @@ export default function Drawing() {
         console.log('fetch')
         try {
           const entryData = await API.graphql(graphqlOperation(listRaffleEntries, {limit: 1000, nextToken: nextToken}))
-          console.log('entryData', entryData.data.listRaffleEntries);
+        //   console.log('entryData', entryData.data.listRaffleEntries);
 
-          const dbEntries = entryData.data.listRaffleEntries.items
-          setEntries([...entries, ...dbEntries])
+            const dbEntries = entryData.data.listRaffleEntries.items
+            const filteredDoubles = [...entries, ...dbEntries].filter((value, index, self) =>
+                index === self.findIndex((t) => (t.email === value.email))
+            )
+
+          setEntries(filteredDoubles)
 
           if (entryData.data.listRaffleEntries.nextToken) {
             setNextToken(entryData.data.listRaffleEntries.nextToken);
@@ -35,17 +39,17 @@ export default function Drawing() {
         setWinner(entries[Math.floor(Math.random()*entries.length)])
     }
 
-    console.log('nextToken', nextToken);
+    // console.log('nextToken', nextToken);
 
     return (
         <div className='drawing'>
           <img src={Logo} alt="The Rat Club" />
 
+            <h2>Polls are closed</h2>
             <h2>{winner.name}</h2>
             <p style={{fontSize: '0.66rem'}}>{winner.id}</p>
 
-            {/* <button onClick={() => generateRandomWinner()}>Generate Winner</button> */}
-
+            {window.location.pathname.includes('button') && <button onClick={() => generateRandomWinner()}>Generate Winner</button>}
 
             <div className="entry-list">
                 <p>{entries.length} Total Entries</p>
