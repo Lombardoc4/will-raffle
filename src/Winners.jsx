@@ -2,63 +2,32 @@ import { useEffect, useState } from 'react';
 import { API, graphqlOperation } from 'aws-amplify';
 
 
-import Logo from './summer-festival-tour-lams.png'
+import Logo from './imgs/pwd-festival-set-lists.png'
 import './drawing.css'
-import { listRaffleEntries, listWinners } from './graphql/queries';
+import { listWinners } from './graphql/queries';
 import { createWinner } from './graphql/mutations';
+import { conf } from './conf';
+import { usePatreonData } from './hooks/usePatreonData';
+import { useEntriesData } from './hooks/useEntriesData';
 
-export default function Drawing() {
-    const [entries, setEntries] = useState([]);
+export default function Winners() {
     const [winners, setWinners] = useState([]);
     const [winner, setWinner] = useState(' ');
-    const [patreons, setPatreons] = useState([]);
+
     const [nextToken, setNextToken] = useState(null);
 
+    const patreons = usePatreonData();
+    const entries = useEntriesData();
+
+    // !const raffleParams = new URLSearchParams(window.location.search.slice(0));
+    const raffleID = 'October';
+    //!const raffleID = raffleParams.get('raffle') || conf.raffle_id;
+
+
     useEffect(() => {
-        fetchEntries()
+        fetchWinners();
     }, [nextToken])
 
-    useEffect(() => {
-        fetchPatreons();
-        fetchWinners();
-    }, [])
-
-    async function fetchPatreons() {
-        try {
-            // Bug some reason need 10000000 to show full results
-            const patreonData = await API.graphql(graphqlOperation(listRaffleEntries, {filter: {patreon: {eq: true}}, limit: 10000000, nextToken: nextToken}))
-
-            // Get DB Entries
-            const patreonEntries = patreonData.data.listRaffleEntries.items
-            // Seperate Patreons
-            setPatreons(patreonEntries.filter((value, index, self) =>
-                index === self.findIndex((t) => (t.email === value.email))
-            ));
-        } catch (err) { console.log('error fetching todos') }
-    }
-
-    async function fetchEntries() {
-        try {
-          const entryData = await API.graphql(graphqlOperation(listRaffleEntries, {limit: 1000, nextToken: nextToken}))
-
-            // Get DB Entries
-            const dbEntries = entryData.data.listRaffleEntries.items
-            // Seperate Patreons
-
-            // Remove duplicates
-            const filteredDoubles = [...entries, ...dbEntries].filter((value, index, self) =>
-            index === self.findIndex((t) => (t.email === value.email))
-            )
-
-            setEntries(filteredDoubles)
-
-            // If next token add token
-            if (entryData.data.listRaffleEntries.nextToken) {
-                setNextToken(entryData.data.listRaffleEntries.nextToken);
-            }
-
-        } catch (err) { console.log('error fetching todos') }
-    }
 
 
     async function addWinner(winningEntry) {
@@ -66,40 +35,43 @@ export default function Drawing() {
             const newWinner = {
             "name": winningEntry.name,
             "email": winningEntry.email,
-            "raffle_id": "October",
+            "raffle_id": conf.raffle_id,
             }
 
             const addedData = await API.graphql(graphqlOperation(createWinner, {input: newWinner}))
-            // console.log();
+
             setWinner(addedData.data.createWinner);
 
         } catch (err) {
-            console.log('error creating todo:', err)
+            console.log('error creating winner:', err)
         }
     }
 
 
-
     async function fetchWinners() {
-        console.log('get winners')
         try {
-          const winnerData = await API.graphql(graphqlOperation(listWinners, {limit: 1000, nextToken: nextToken}))
+            const winnerData = await API.graphql(graphqlOperation(listWinners, {
+                filter: {raffle_id: {eq: raffleID}},
+                limit: 1000,
+                nextToken: nextToken
+            }))
 
-            const dbWinners = winnerData.data.listWinners.items;
+            setWinners([...winners, ...winnerData.data.listWinners.items])
 
-            setWinners([...winners, ...dbWinners])
-
-          if (winnerData.data.listWinners.nextToken) {
-            setNextToken(winnerData.data.listWinners.nextToken);
-          }
+            if (winnerData.data.listWinners.nextToken) {
+                setNextToken(winnerData.data.listWinners.nextToken);
+            }
         } catch (err) { console.log('error fetching todos') }
     }
 
 
     const generateRandomWinner = () => {
-        const allEntries = [...entries, ...patreons]
+        const allEntries = [...entries, ...patreons];
+
         const newWinner = allEntries[Math.floor(Math.random()*allEntries.length)];
+
         setWinners([...winners, newWinner])
+
         addWinner(newWinner)
     }
 
