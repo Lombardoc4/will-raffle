@@ -84,7 +84,7 @@ export default function Winners() {
             <h2>{winner.name}</h2>
             <p style={{fontSize: '0.66rem'}}>{winner.id}</p>
 
-            <button onClick={() => generateRandomWinner()}>Generate Winner</button>
+            {/*<button onClick={() => generateRandomWinner()}>Generate Winner</button>*/}
 
             <div className="entry-list">
                 <p>Total Winners: {winners.length}</p>
