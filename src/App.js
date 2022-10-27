@@ -81,13 +81,14 @@ function RaffleForm() {
           )}
           {!submitted && (
             <>
+            <p>Raffle Opening Soon</p>
               <p>
                   Enter the Raffle to Win:<br/>
                   {conf.raffle_item}
               </p>
-              <input type="text" id="name" placeholder="Name" onChange={e => setName(e.target.value)}/>
+              {/* <input type="text" id="name" placeholder="Name" onChange={e => setName(e.target.value)}/>
               <input type="email" id="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
-              <button type="submit">Enter Now</button>
+              <button type="submit">Enter Now</button> */}
             </>
           )}
         </form>
