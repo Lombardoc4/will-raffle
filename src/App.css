@@ -31,7 +31,7 @@ input{
   padding: 0.5rem;
 }
 
-button {
+.button, button {
  border-radius: 8px;
  border: 1px solid transparent;
  padding: 0.6em 1.2em;
@@ -43,9 +43,23 @@ button {
  cursor: pointer;
  transition: border-color 0.25s;
 }
-button:hover {
- border-color: #646cff;
+
+.button.pink-btn, button.pink-btn{
+  background-color: #F0CEE1;
+  text-transform: uppercase;
+  font-weight: 700;
 }
+
+a.button{
+  text-decoration: none;
+}
+
+.button:hover, button:hover {
+ border-color: #F7EACF;
+}
+
+.button:focus,
+.button:focus-visible
 button:focus,
 button:focus-visible {
  outline: 4px auto -webkit-focus-ring-color;
@@ -57,6 +71,6 @@ button:focus-visible {
    background-color: #ffffff;
  }
  a:hover {
-   color: #747bff;
+   color: #F7EACF;
  }
 }

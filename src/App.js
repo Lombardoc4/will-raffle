@@ -21,6 +21,17 @@ const validateInput = (name, options) => {
   return true;
 }
 
+const JoinPatreon = () => {
+  return (
+    <>
+      <p>This raffle is exclusively for Patreons</p>
+      <a className='button pink-btn' href="https://www.patreon.com/thewillramos">
+          Join The Rat Club
+      </a>
+    </>
+  )
+}
+
 
 function RaffleForm() {
     const [submitted, setSubmitted] = useState(false);
@@ -81,14 +92,34 @@ function RaffleForm() {
           )}
           {!submitted && (
             <>
-            <p>Raffle Opening Soon</p>
               <p>
-                  Enter the Raffle to Win:<br/>
-                  {conf.raffle_item}
+                  Enter to Win:<br/>
+                  <i style={{fontSize: '1.5rem'}}>{conf.raffle_item}</i>
               </p>
-              {/* <input type="text" id="name" placeholder="Name" onChange={e => setName(e.target.value)}/>
-              <input type="email" id="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
-              <button type="submit">Enter Now</button> */}
+
+
+            { Date.now() > new Date(conf.raffle_opening_date).getTime() ?
+              <>
+              <p>Raffle Closes:<br/> {new Date(conf.raffle_drawing_date).toLocaleString()}</p>
+
+              { (conf.patreon_only && window.location.pathname.includes('patreon'))   ?
+                <>
+                  <input type="text" id="name" placeholder="Name" onChange={e => setName(e.target.value)}/>
+                  <input type="email" id="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
+                  <button type="submit">Enter Now</button>
+                </>
+                :
+                <JoinPatreon/>
+               }
+
+              </>
+              :
+              <>
+                <p>Raffle Opens:<br/> {new Date(conf.raffle_opening_date).toLocaleString()}</p>
+                <JoinPatreon/>
+              </>
+            }
+
             </>
           )}
         </form>

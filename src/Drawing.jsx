@@ -22,7 +22,7 @@ export default function Drawing() {
         <div className='drawing'>
           <img src={Logo} alt="The Rat Club" />
 
-            <h2>Drawing is on {conf.raffle_drawing_date}</h2>
+            <h2>Drawing is on <br/>{new Date(conf.raffle_drawing_date).toLocaleString()}</h2>
 
             <div className="entry-list">
                 <p>{[...entries, ...patreons].length} Total Entries</p>
