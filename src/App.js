@@ -92,13 +92,14 @@ function RaffleForm() {
           )}
           {!submitted && (
             <>
+              <h1>Raffles Closed</h1>
               <p>
                   Enter to Win:<br/>
                   <i style={{fontSize: '1.5rem'}}>{conf.raffle_item}</i>
               </p>
 
 
-            { Date.now() > new Date(conf.raffle_opening_date).getTime() ?
+            {/* { Date.now() > new Date(conf.raffle_opening_date).getTime() ?
               <>
               <p>Raffle Closes:<br/> {new Date(conf.raffle_drawing_date).toLocaleString()}</p>
 
@@ -118,7 +119,7 @@ function RaffleForm() {
                 <p>Raffle Opens:<br/> {new Date(conf.raffle_opening_date).toLocaleString()}</p>
                 <JoinPatreon/>
               </>
-            }
+            } */}
 
             </>
           )}
