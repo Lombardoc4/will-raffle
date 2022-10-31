@@ -19,9 +19,9 @@ export default function Winners() {
     const patreons = usePatreonData();
     const entries = useEntriesData();
 
-    // !const raffleParams = new URLSearchParams(window.location.search.slice(0));
-    const raffleID = 'October';
-    //!const raffleID = raffleParams.get('raffle') || conf.raffle_id;
+    const raffleParams = new URLSearchParams(window.location.search.slice(0));
+    // const raffleID = 'October';
+    const raffleID = raffleParams.get('raffle') || conf.raffle_id;
 
 
     useEffect(() => {
@@ -84,7 +84,7 @@ export default function Winners() {
             <h2>{winner.name}</h2>
             <p style={{fontSize: '0.66rem'}}>{winner.id}</p>
 
-            {/*<button onClick={() => generateRandomWinner()}>Generate Winner</button>*/}
+            {window.location.pathname.includes('will') && <button onClick={() => generateRandomWinner()}>Generate Winner</button>}
 
             <div className="entry-list">
                 <p>Total Winners: {winners.length}</p>
