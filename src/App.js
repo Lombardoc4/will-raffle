@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Logo from './imgs/pwd-festival-set-lists.png';
-// import Logo from './the-rat-club.png';
+// import Logo from './imgs/pwd-festival-set-lists.png';
+import Logo from './imgs/the-rat-club.png';
 import './App.css';
 
 import {  API, graphqlOperation } from 'aws-amplify'
@@ -92,26 +92,28 @@ function RaffleForm() {
           )}
           {!submitted && (
             <>
-              <h1>Raffles Closed</h1>
+              {/* <h1>Raffles Closed</h1> */}
               <p>
-                  Enter to Win:<br/>
+                  {Date.now() < new Date(conf.raffle_drawing_date).getTime() ? 'Enter to Win:' : 'Raffles Closed'}<br/>
                   <i style={{fontSize: '1.5rem'}}>{conf.raffle_item}</i>
               </p>
 
 
-            {/* { Date.now() > new Date(conf.raffle_opening_date).getTime() ?
+            {Date.now() < new Date(conf.raffle_drawing_date).getTime() &&
               <>
-              <p>Raffle Closes:<br/> {new Date(conf.raffle_drawing_date).toLocaleString()}</p>
-
-              { (conf.patreon_only && window.location.pathname.includes('patreon'))   ?
+              { Date.now() > new Date(conf.raffle_opening_date).getTime() ?
                 <>
-                  <input type="text" id="name" placeholder="Name" onChange={e => setName(e.target.value)}/>
-                  <input type="email" id="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
-                  <button type="submit">Enter Now</button>
+                <p>Raffle Closes:<br/> {new Date(conf.raffle_drawing_date).toLocaleString()}</p>
+
+                { (conf.patreon_only && window.location.pathname.includes('patreon'))   ?
+                <>
+                <input type="text" id="name" placeholder="Name" onChange={e => setName(e.target.value)}/>
+                <input type="email" id="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
+                <button type="submit">Enter Now</button>
                 </>
                 :
                 <JoinPatreon/>
-               }
+              }
 
               </>
               :
@@ -119,7 +121,9 @@ function RaffleForm() {
                 <p>Raffle Opens:<br/> {new Date(conf.raffle_opening_date).toLocaleString()}</p>
                 <JoinPatreon/>
               </>
-            } */}
+              }
+              </>
+            }
 
             </>
           )}
